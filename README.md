@@ -8,27 +8,29 @@ Before getting started, make sure you have the following installed:
 
 - Java Development Kit (JDK) 
 - Apache Maven
-- PostgreSQL - Make sure you have a PostgreSQL server running locally or on a reachable host.
+- Docker Desktop
 - Postman - This is optional, but it is recommended to have Postman installed to test the API endpoints.
 
 ## Setup
 
 1. Clone the repository to your local machine
 
-2. Create a PostgreSQL database
+   ```bash
+   git clone https://github.com/cadusouza2001/bancos-de-dados-II-orm-exemplo.git
+    ```
+   
+2. Navigate to the project directory:
 
    ```bash
-   createdb your_db_name
+   cd bancos-de-dados-II-orm-exemplo
    ```
-   
-3. Create a '.env' file in the root directory of the project and add the following environment variables:
+
+3. Run the following command to start the PostgreSQL database:
 
    ```bash
-   DATABASE_NAME=your_db_name
-   DATABASE_USER=your_db_user
-   DATABASE_PASSWORD=your_db_password
+   docker-compose up -d
    ```
-   
+
 4. Build the project using Maven:
 
    ```bash
@@ -38,5 +40,8 @@ Before getting started, make sure you have the following installed:
 5. Run the application:
 
    ```bash
-    mvn spring-boot:run
+   mvn spring-boot:run
     ```
+   
+## Postman Collection
+The Movie_Watchlist.postman_collection.json file contains a Postman collection with all the API endpoints. You can import this file into Postman to test the endpoints.
