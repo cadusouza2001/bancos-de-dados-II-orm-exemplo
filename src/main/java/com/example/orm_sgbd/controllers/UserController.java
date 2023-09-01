@@ -1,6 +1,7 @@
 package com.example.orm_sgbd.controllers;
 
 import com.example.orm_sgbd.dtos.UserRecordDto;
+import com.example.orm_sgbd.models.Review;
 import com.example.orm_sgbd.models.User;
 import com.example.orm_sgbd.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -60,7 +61,14 @@ public class UserController {
         userRepository.delete(user);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-
+    
+    @GetMapping(path = "/by-adress/{id}")
+    public ResponseEntity<Object> getUsersByAdressId(@PathVariable("id") UUID id) {
+        Iterable<Review> users = userRepository.findByAdressIdAdress(id);
+        if (users == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
 
 }
