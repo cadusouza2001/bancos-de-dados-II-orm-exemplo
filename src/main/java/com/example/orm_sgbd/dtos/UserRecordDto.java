@@ -1,6 +1,9 @@
 package com.example.orm_sgbd.dtos;
 
-import jakarta.validation.constraints.NotBlank;
+import com.example.orm_sgbd.models.Adress;
 
-public record UserRecordDto(@NotBlank String username) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record UserRecordDto(@NotBlank String username, @NotNull Adress adress) {
 }

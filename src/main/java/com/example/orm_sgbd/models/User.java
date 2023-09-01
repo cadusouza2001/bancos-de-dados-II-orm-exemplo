@@ -23,6 +23,11 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "idMovie")
     )
     private List<Movie> watchlist;
+    
+    //One adress to one user
+    @OneToOne
+    @JoinColumn(name = "idAdress")
+    private Adress adress;
 
     public UUID getIdUser() {
         return idUser;
@@ -47,4 +52,12 @@ public class User implements Serializable {
     public void setWatchlist(List<Movie> watchlist) {
         this.watchlist = watchlist;
     }
+
+	public Adress getAdress() {
+		return adress;
+	}
+
+	public void setAdress(Adress adress) {
+		this.adress = adress;
+	}
 }
