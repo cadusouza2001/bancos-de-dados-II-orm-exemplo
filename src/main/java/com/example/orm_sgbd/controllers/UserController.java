@@ -2,8 +2,9 @@ package com.example.orm_sgbd.controllers;
 
 import com.example.orm_sgbd.dtos.UserRecordDto;
 import com.example.orm_sgbd.models.ContactInfo;
-import com.example.orm_sgbd.models.Review;
+import com.example.orm_sgbd.models.Movie;
 import com.example.orm_sgbd.models.User;
+import com.example.orm_sgbd.repositories.MovieRepository;
 import com.example.orm_sgbd.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +21,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MovieRepository movieRepository;
+
     private static final String USER_NOT_FOUND = "User not found";
+    private static final String MOVIE_NOT_FOUND = "Movie not found";
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRecordDto userRecordDto) {
@@ -80,6 +85,47 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
+    @PostMapping(path = "/{id}/watchlist/{idMovie}")
+    public ResponseEntity<Object> addMovieToWatchlist(@PathVariable("id") UUID id, @PathVariable("idMovie") UUID idMovie) {
+        User user = userRepository.findById(id).orElse(null);
+        Movie movie = movieRepository.findById(idMovie).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
+        }
+        if (movie == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MOVIE_NOT_FOUND);
+        }
+        user.getWatchlist().add(movie);
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Movie added to watchlist");
+    }
+
+    @GetMapping(path = "/{id}/watchlist")
+    public ResponseEntity<Object> getWatchlist(@PathVariable("id") UUID id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user.getWatchlist());
+    }
+
+    @DeleteMapping(path = "/{id}/watchlist/{idMovie}")
+    public ResponseEntity<Object> removeMovieFromWatchlist(@PathVariable("id") UUID id, @PathVariable("idMovie") UUID idMovie) {
+        User user = userRepository.findById(id).orElse(null);
+        Movie movie = movieRepository.findById(idMovie).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
+        }
+        if (movie == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MOVIE_NOT_FOUND);
+        }
+        user.getWatchlist().remove(movie);
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Movie removed from watchlist");
     }
 
 }
