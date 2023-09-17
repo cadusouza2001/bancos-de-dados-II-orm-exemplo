@@ -1,4 +1,6 @@
 package com.example.orm_sgbd.models;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -6,6 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -23,11 +26,10 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "idMovie")
     )
     private List<Movie> watchlist;
-    
-    //One adress to one user
-    @OneToOne
-    @JoinColumn(name = "idAdress")
-    private Adress adress;
+
+    //One contact to one user
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ContactInfo contactInfo;
 
     public UUID getIdUser() {
         return idUser;
@@ -53,11 +55,11 @@ public class User implements Serializable {
         this.watchlist = watchlist;
     }
 
-	public Adress getAdress() {
-		return adress;
+	public ContactInfo getContactInfo() {
+		return contactInfo;
 	}
 
-	public void setAdress(Adress adress) {
-		this.adress = adress;
+	public void setContactInfo(ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 }

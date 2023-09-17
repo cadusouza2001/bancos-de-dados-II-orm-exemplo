@@ -1,9 +1,14 @@
 package com.example.orm_sgbd.dtos;
 
-import com.example.orm_sgbd.models.Adress;
-
+import com.example.orm_sgbd.models.ContactInfo;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record UserRecordDto(@NotBlank String username, @NotNull Adress adress) {
+public record UserRecordDto(@NotBlank String username, ContactInfo contactInfo) {
+
+    public String getUsername() {
+        return this.username;
+    }
+    public ContactInfo getContactInfo() {
+        return this.contactInfo;
+    }
 }

@@ -3,27 +3,29 @@ package com.example.orm_sgbd.models;
 import java.io.Serializable;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "adress")
-public class Adress implements Serializable {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idContactInfo")
+public class ContactInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID idAdress;
+	private UUID idContactInfo;
+
+	//One user to one contact
+	@OneToOne
+	@JoinColumn(name = "idUser")
+	private User user;
 	
 	@Column(nullable = false)
     private String streetName;
 	
 	@Column(nullable = false)
-	private int adressNumber;
+	private String addressNumber;
 	
 	private String complement;
 	
@@ -36,12 +38,14 @@ public class Adress implements Serializable {
 	@Column(nullable = false)
 	private String country;
 
-	public UUID getIdAdress() {
-		return idAdress;
+	private String phoneNumber;
+
+	public UUID getIdContactInfo() {
+		return idContactInfo;
 	}
 
-	public void setIdAdress(UUID idAdress) {
-		this.idAdress = idAdress;
+	public void setIdContactInfo(UUID idContact) {
+		this.idContactInfo = idContact;
 	}
 
 	public String getStreetName() {
@@ -52,12 +56,12 @@ public class Adress implements Serializable {
 		this.streetName = streetName;
 	}
 
-	public int getAdressNumber() {
-		return adressNumber;
+	public String getAddressNumber() {
+		return addressNumber;
 	}
 
-	public void setAdressNumber(int adressNumber) {
-		this.adressNumber = adressNumber;
+	public void setAddressNumber(String addressNumber) {
+		this.addressNumber = addressNumber;
 	}
 
 	public String getComplement() {
@@ -91,5 +95,20 @@ public class Adress implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

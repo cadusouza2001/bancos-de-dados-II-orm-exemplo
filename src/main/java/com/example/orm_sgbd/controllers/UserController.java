@@ -1,6 +1,7 @@
 package com.example.orm_sgbd.controllers;
 
 import com.example.orm_sgbd.dtos.UserRecordDto;
+import com.example.orm_sgbd.models.ContactInfo;
 import com.example.orm_sgbd.models.Review;
 import com.example.orm_sgbd.models.User;
 import com.example.orm_sgbd.repositories.UserRepository;
@@ -23,8 +24,12 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRecordDto userRecordDto) {
+
         User user = new User();
         BeanUtils.copyProperties(userRecordDto, user);
+
+        user.getContactInfo().setUser(user);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
     }
 
@@ -48,7 +53,13 @@ public class UserController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
         }
+
+        ContactInfo contactInfo = user.getContactInfo();
+
         BeanUtils.copyProperties(userRecordDto, user);
+
+        user.setContactInfo(contactInfo);
+
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(user));
     }
 
@@ -62,9 +73,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     
-    @GetMapping(path = "/by-adress/{id}")
-    public ResponseEntity<Object> getUsersByAdressId(@PathVariable("id") UUID id) {
-        Iterable<Review> users = userRepository.findByAdressIdAdress(id);
+    @GetMapping(path = "/by-contact/{id}")
+    public ResponseEntity<Object> getUserB (@PathVariable("id") UUID id) {
+        Iterable<User> users = userRepository.findByContactInfoIdContactInfo(id);
         if (users == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_NOT_FOUND);
         }
